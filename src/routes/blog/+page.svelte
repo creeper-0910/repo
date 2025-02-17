@@ -12,7 +12,7 @@
         const fetchBlog = await fetch("/api/article");
         const parsedBlog = await fetchBlog.json();
         console.log(JSON.stringify(parsedBlog));
-        blogList = await parsedBlog.objects.map(async (data) => {
+        blogList = await Promise.all(parsedBlog.objects.map(async (data) => {
         const articleDate = new Date(data.uploaded);
         console.log(JSON.stringify(articleDate));
         const fetchArticle = await fetch(`/api/article/${data.key}`);
@@ -22,9 +22,9 @@
         return {
             href: `/article/${data.key}`,
             title: articleTitle,
-            date: `${articleDate.getFullYear()}/${articleDate.getMonth()}/${articleDate.getDay()} ${articleDate.getHours()}:${articleDate.getMinutes()}`
+            date: `${articleDate.getFullYear()}/${articleDate.getMonth()+1}/${articleDate.getDate()} ${articleDate.getHours()}:${articleDate.getMinutes()}`
         };
-        });
+        }));
         console.log(JSON.stringify(blogList))
     });
 </script>

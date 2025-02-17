@@ -1,3 +1,4 @@
+import * as cheerio from 'cheerio';
 import { Marked, Parser, Renderer } from "marked";
 export function parseMarkdown(source: string) {
     const marked = new Marked();
@@ -16,8 +17,8 @@ export function parseMarkdown(source: string) {
           },
         },
       });
-      const html = marked.parse(source) as string;
-      const title =  "aaaa";
+      const html = marked.parse(source);
+      const title =  typeof cheerio.load(html).html();
       console.log(html);
     return {
         title: title,
