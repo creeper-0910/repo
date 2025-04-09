@@ -18,6 +18,6 @@ async function reqContent(r2Api: unknown,r2Url: string, name: string):Promise<Re
                 });
         }else{
                 const list = await r2Api.list();
-                return new Response(JSON.stringify(list));
+                return new Response(await JSON.stringify(list));
         }
 }

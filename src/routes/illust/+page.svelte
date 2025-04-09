@@ -6,6 +6,11 @@
   let clickImageData: ImgType;
   onMount(async () => {
     const fetchGallery = await fetch("/api/gallery");
+    if(fetchGallery.status !== 200) {
+            if(fetchGallery.status !== 304) {
+                console.log(fetchGallery.body);
+            }
+        }
     const parsedGallery = await fetchGallery.json();
     picList = parsedGallery.objects.map((data) => {
       return {

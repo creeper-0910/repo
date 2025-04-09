@@ -1,5 +1,7 @@
+import { sanitize } from '@jill64/universal-sanitizer';
 import * as cheerio from 'cheerio';
 import { Marked, Parser, Renderer } from "marked";
+import sanitizeHtml from 'sanitize-html';
 export function parseMarkdown(source: string) {
     const marked = new Marked();
     const originalRenderer = new Renderer();
@@ -11,17 +13,23 @@ export function parseMarkdown(source: string) {
         renderer: {
           heading(heading) {
             if(heading.depth === 1) {
-                return `<title>${heading.text}</title}>`;
+                return `<title>${heading.text}</title>`;
+            }else if(heading.depth === 2) {
+                return `<h2>${heading.text}</h2><Hr/>`;
             }
-            return originalRenderer.heading(heading);
+            return `<h${heading.depth}>${heading.text}</h${heading.depth}>`;
           },
         },
       });
-      const html = marked.parse(source);
-      const title =  typeof cheerio.load(html).html();
-      console.log(html);
+      const html = marked.parse(source) as string;
+      const node =  cheerio.load(html);
+      const title = node('title').first().text();
+      const sanitizedHtml = sanitize(html,{sanitizeHtml:{
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'Hr' ])
+      }
+      });
     return {
         title: title,
-        html: html,
+        html: sanitizedHtml,
     };
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { parseMarkdown } from '$lib/components/markdown';
-    import { Card, Spinner} from 'flowbite-svelte';
+    import { Card, Spinner } from 'flowbite-svelte';
     import { onMount } from 'svelte';
     type BlogType = {
     href: string;
@@ -10,22 +10,23 @@
     let blogList: BlogType[] = [];
     onMount(async () => {
         const fetchBlog = await fetch("/api/article");
+        if(fetchBlog.status !== 200) {
+            if(fetchBlog.status !== 304) {
+                console.log(fetchBlog.body);
+            }
+        }
         const parsedBlog = await fetchBlog.json();
-        console.log(JSON.stringify(parsedBlog));
         blogList = await Promise.all(parsedBlog.objects.map(async (data) => {
         const articleDate = new Date(data.uploaded);
-        console.log(JSON.stringify(articleDate));
         const fetchArticle = await fetch(`/api/article/${data.key}`);
         const fetchText = await fetchArticle.text();
-        console.log(JSON.stringify(fetchText));
         const articleTitle = await parseMarkdown(fetchText).title;
         return {
-            href: `/article/${data.key}`,
+            href: `/article/${data.key.split('.').slice(0, -1).join('.')}`,
             title: articleTitle,
             date: `${articleDate.getFullYear()}/${articleDate.getMonth()+1}/${articleDate.getDate()} ${articleDate.getHours()}:${articleDate.getMinutes()}`
         };
         }));
-        console.log(JSON.stringify(blogList))
     });
 </script>
 

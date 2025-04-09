@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Alert, DarkMode, Navbar, NavBrand, NavHamburger, NavLi, NavUl } from 'flowbite-svelte';
+	import { DarkMode, Footer, FooterCopyright, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
 	import type { SlideParams } from 'svelte/transition';
 	import '../app.css';
@@ -9,8 +9,10 @@
       duration: 250,
       easing: sineIn,
     };
+	let date = new Date();
+	let year = date.getFullYear();
 </script>
-<div class="font-kanaka tracking-wide">
+<div class="font-kanaka tracking-wide min-h-screen">
 <Navbar class="bg-primary-500" let:hidden let:toggle>
 	<NavBrand href="/" class="hidden md:flex">
 		<img src="/favicon.webp" class="me-2 h-10 sm:h-16" alt="サイトアイコン" />
@@ -34,10 +36,21 @@
 	</NavUl>
 	<DarkMode class="text-white hover:bg-primary-300 hidden md:flex"/>
   </Navbar>
-  <Alert class="m-4 mb-0">
+  <!-- <Alert class="m-4 mb-0">
 	<span class="font-medium">注意!</span>
 	このサイトは構築中です!
-</Alert>
+</Alert> -->
 
 {@render children()}
 </div>
+<Footer class="mb-3 ml-5 mr-5 font-kanaka tracking-wide">
+	<div class="sm:flex sm:items-end sm:justify-between">
+			<FooterCopyright href="/" by="Inagi Saki" year={year} />
+			<div class="flex">
+				<a href="https://nullnyat.nca10.moe/"><img alt="nullnyat_banner" src="https://nullnyat.nca10.moe/nullnyat-banner.webp" class="mb-2 mr-2 max-h-14"></a>
+				<a href="https://miriel.net"><img alt="miriel_banner" src="https://miriel.net/images/mirielnet.png" class="mb-2 mr-2 max-h-14"></a>
+				<a href="https://inagi-saki.work/"><img src="/images/banner.png" alt="咲の仕事場" class="mb-2 mr-2 max-h-14"/></a>
+				<div class="text-gray-400">相互リンク募集中です。<br>連絡先からお気軽にお問い合わせください。</div>
+			</div>
+	</div>
+</Footer>
